@@ -1,6 +1,5 @@
 
 # face-recognition-web-app
-v-1.1
 It is a full-stack working web application using Clarifai Web API for face detection in an image,using a website with frontend designed completely using REACTjs, server using NODEjs and EXPRESSjs and PostgreSQL for database. The frontend, server and database of the website are deployed on heroku.
 
 [Do check out the application here](https://face-recognition-kunal.herokuapp.com/)
