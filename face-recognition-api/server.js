@@ -13,11 +13,11 @@ const image = require("./controllers/image");
 const db = knex({
   client: "pg",
   connection: {
-    host: "ec2-52-22-216-69.compute-1.amazonaws.com",
-    user: "obyhssnchuewwx",
+    host: "john.db.elephantsql.com",
+    user: "wnjxqejh",
     password:
-      "d3a028f0067317adbb9311033a1a986e1fcdfe30b4dc145b2b52e8c85cd089bb",
-    database: "ddj0fdg8hme593",
+      "1BZ4GEl_Gjj_3rSS7UyLCrjSboSxB8ZC",
+    database: "wnjxqejh",
     ssl: {
       rejectUnauthorized: false,
     },
