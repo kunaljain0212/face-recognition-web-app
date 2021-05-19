@@ -56,29 +56,39 @@ exports.handleRegister = (req, res) => {
     });
 };
 
-// const handleSignin = (req, res, bcrypt, db) => {
-//   const { email, password } = req.body;
-//   if (!email || !password) {
-//     return res.status(400).json("Incorrect form submission");
-//   }
-//   db.select("email", "hash")
-//     .from("login")
-//     .where("email", "=", email)
-//     .then((data) => {
-//       const isValid = bcrypt.compareSync(password, data[0].hash);
-//       if (isValid) {
-//         return db
-//           .select("*")
-//           .from("users")
-//           .where("email", "=", email)
-//           .then((user) => {
-//             // console.log(user[0]);
-//             res.json(user[0]);
-//           })
-//           .catch((err) => res.status(400).json("Unable to get user"));
-//       } else {
-//         res.status(400).json("Wrong Credentials");
-//       }
-//     })
-//     .catch((err) => res.status(400).json("Wrong Credentials"));
-// };
+exports.handleSignin = (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Incorrect form submission" });
+  }
+  client
+    .query(`SELECT * FROM users WHERE email = '${email}';`)
+    .then((data) => {
+      userData = data.rows;
+      if (userData.length === 0) {
+        res.status(400).json({
+          error: "User does not exist, signup instead!",
+        });
+      } else {
+        bcrypt.compare(password, userData[0].password, (err, result) => {
+          if (err) {
+            res.status(500).json({
+              error: "Server error!",
+            });
+          } else if (result === true) {
+            userData[0].password = null;
+            res.status(200).json(userData[0]);
+          } else {
+            res.status(400).json({
+              error: "Enter correct password!",
+            });
+          }
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: "Database error occurred!",
+      });
+    });
+};
