@@ -1,9 +1,8 @@
 
 # face-recognition-web-app
-It is a full-stack working web application using Clarifai Web API for face detection in an image,using a website with frontend designed completely using REACTjs, server using NODEjs and EXPRESSjs and PostgreSQL for database. The frontend, server and database of the website are deployed on heroku.
+It is a full-stack working web application using Clarifai Web API for face detection in an image,using a website with frontend designed completely using React.js, server using Node.js and Express.js and PostgreSQL for database. Frontend of the application has been deployed to Vercel, backend to Heroku and for database I've used elephantSQL which is a hosted service for PostgreSQL.
 
 [Do check out the application here](https://face-recognition-kunal.herokuapp.com/)
-
 
 ### Steps to start:
 1. Clone this repo
@@ -11,60 +10,33 @@ It is a full-stack working web application using Clarifai Web API for face detec
 2. Go to face-recognition-web-app/face-recognition-frontend
     This is the main project folder for the front end.
 
-3. Run npm install
+3. Run `npm install`
     This will install all the dependencies.
 
 4. Go to face-recognition-web-app/face-recognition-api
     This is the server i.e. the back-end for the application
     
-5. Run npm install
+5. Run `npm install`
     This will install all the dependencies.
     
-6. You must add your own API key in the `face-recognition-web-app/face-recognition-api/controllers/image.js` file to connect to Clarifai.
+6. You must add your own API key and Databse URI in the `face-recognition-web-app/face-recognition-api/.env` file to connect to Clarifai and your database. The name of the variables are available in .example.env file.
 
 You can grab your free Clarifai API key from here [here](https://www.clarifai.com/)
     
-7. Run npm start
-    This will run the server, on port 3000
+7. Run `npm start`
+    This will run the server, on port 8000
     
-8. Go to face-recognition-web-app/face-recognition-webapp and run npm start
-    Press Y when prompted for using another port
-    (Since 3000 is default for create-react-app module and it is occupied)
-    It will use the port 3001
-    
+8. Go to face-recognition-web-app/face-recognition-webapp and run `npm start`
+    This will run the frontend, on port 3000
     
 ### Configuring Database:
-** Make sure you use postgreSQL instead of mySQL for this code base.
+** I've used [ElephantSQL](https://www.elephantsql.com/) which is a hosted service for postgreSQL but you can create you local database as well.
 1. Create a database face-recog (Or any other name you prefer)
-2. Create two tables users and login, with following structure:
-(Generated using \d tb_name in psql)
-
-                                    Table "public.users"
-                                    
-| Column  |            Type             |                     Modifiers
-|---------|-----------------------------|-----------------------------------------------
-| id      | integer                     | not null default nextval('users_id_seq'::regclass)
-| name    | character varying(100)      | 
-| email   | text                        | not null
-| entries | bigint                      | default 0
-| joined  | timestamp without time zone | not null
-Indexes:
-    "users_pkey" PRIMARY KEY, btree (id)
-    "users_email_key" UNIQUE CONSTRAINT, btree (email)
-    
-                                 Table "public.login"                                 
-| Column |          Type          |                     Modifiers
-|--------|------------------------|----------------------------------------------------
-| id     | integer                | not null default nextval('login_id_seq'::regclass)
-| hash   | character varying(100) | not null
-| email  | text                   | not null
-Indexes:
-    "login_pkey" PRIMARY KEY, btree (id)
-    "login_email_key" UNIQUE CONSTRAINT, btree (email)
-
-
-
-3. Enter your server details in `face-recognition-web-app/face-recognition-api/server.js` file.
+2. Create a table named users, with following structure:
+```
+CREATE TABLE users (id SERIAL PRIMARY KEY, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, entries BIGNINT DEFAULT O);
+```
+3. Enter your server details in `face-recognition-web-app/face-recognition-api/.env` file.
 
 #### Modules used:
 1. [react](https://www.npmjs.com/package/react)
