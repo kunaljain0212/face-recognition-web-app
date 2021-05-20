@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-// import Clarifai from "clarifai";
 import Particles from "react-particles-js";
 import Navigation from "./components/navigation/Navigation";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
-// import Logo from "./components/Logo/Logo";
 import Rank from "./components/Rank/Rank";
 import Register from "./components/Register/Register";
 import Signin from "./components/Signin/Signin";
@@ -82,9 +80,6 @@ class App extends Component {
         bottomRow: height - value.bottom_row * height,
       };
     });
-    // cordi.forEach(element => {
-    //   console.log(element);
-    // });
     return cordi;
   };
 
@@ -94,7 +89,6 @@ class App extends Component {
 
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
-    // console.log("1" + event.target.value);
   };
 
   onSubmit = () => {
@@ -104,7 +98,7 @@ class App extends Component {
     const inputBar = document.getElementById("inputBar");
     inputBar.value = "";
     // console.log('image' + this.state.imageURL);
-    fetch("https://tranquil-dawn-60171.herokuapp.com/imageurl", {
+    fetch(`${process.env.REACT_API_URL}/image/apiCall`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +111,7 @@ class App extends Component {
       .then((response) => {
         // console.log(response);
         if (response) {
-          fetch("https://tranquil-dawn-60171.herokuapp.com/image", {
+          fetch(`${process.env.REACT_API_URL}/image/updateEntries`, {
             method: "put",
             headers: {
               "Content-Type": "application/json",
