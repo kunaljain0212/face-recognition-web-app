@@ -98,7 +98,7 @@ class App extends Component {
     const inputBar = document.getElementById("inputBar");
     inputBar.value = "";
     // console.log('image' + this.state.imageURL);
-    fetch(`${process.env.REACT_API_URL}/image/apiCall`, {
+    fetch(`${process.env.REACT_APP_API_URL}/image/apiCall`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -111,7 +111,7 @@ class App extends Component {
       .then((response) => {
         // console.log(response);
         if (response) {
-          fetch(`${process.env.REACT_API_URL}/image/updateEntries`, {
+          fetch(`${process.env.REACT_APP_API_URL}/image/updateEntries`, {
             method: "put",
             headers: {
               "Content-Type": "application/json",

@@ -25,7 +25,7 @@ class Register extends React.Component {
   onRegister = () => {
     // console.log(this.state);
     // this.props.changeRoute("home")
-    fetch(`${process.env.REACT_API_URL}/auth/register`, {
+    fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
