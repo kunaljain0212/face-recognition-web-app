@@ -92,3 +92,19 @@ exports.handleSignin = (req, res) => {
       });
     });
 };
+
+exports.handleProfile = (req, res) => {
+  const { id } = req.params;
+  client
+    .query(`SELECT * FROM users WHERE id = '${id}';`)
+    .then((data) => {
+      isValid = data.rows;
+      if (isValid.length !== 0) {
+        isValid[0].password = null;
+        res.status(200).json(isValid[0]);
+      } else {
+        res.status(400).json({ error: "Database error occurred" });
+      }
+    })
+    .catch((err) => res.status(400).json({ error: "error getting user" }));
+};

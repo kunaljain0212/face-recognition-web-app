@@ -1,31 +1,46 @@
 const Clarifai = require("clarifai");
+const client = require("../configs/db");
 
 const app = new Clarifai.App({
-  apiKey: "c3c35a0bc14c47f8b14d3bee023b543c",
+  apiKey: process.env.CLARIFAI_API_KEY,
 });
 
-const handleApiCall = (req, res) => {
-  app.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
-  .then(data => {
-    // console.log(data);
-    res.json(data)
-  })
-  .catch(err => res.status(400).json('Unable to work with API'))
-};
-
-const handleImage = (req, res, db) => {
-  const { id } = req.body;
-  db("users")
-    .where("id", "=", id)
-    .increment("entries", 1)
-    .returning("entries")
-    .then((entries) => {
-      res.json(entries[0]);
+exports.handleApiCall = (req, res) => {
+  app.models
+    .predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+    .then((data) => {
+      res.status(200).json(data);
     })
-    .catch((err) => res.status(400).json("Could not update"));
+    .catch((err) => res.status(400).json({ error: "Unable to work with API" }));
 };
 
-module.exports = {
-  handleImage: handleImage,
-  handleApiCall: handleApiCall,
+exports.handleImage = (req, res) => {
+  const { id } = req.body;
+
+  client
+    .query(`SELECT * FROM users WHERE id = '${id}';`)
+    .then((data) => {
+      isValid = data.rows;
+      if (isValid.length !== 0) {
+        isValid[0].password = null;
+        console.log(Number(isValid[0].entries));
+        isValid[0].entries = Number(isValid[0].entries) + 1;
+        console.log(isValid[0].entries);
+        client
+          .query(
+            `UPDATE users SET entries='${isValid[0].entries}' WHERE id = '${id}';`
+          )
+          .then((data) => {
+            res.status(200).json(isValid[0].entries);
+          })
+          .catch((err) => {
+            res.status(400).json({
+              message: "Database error occured while updating entries",
+            });
+          });
+      } else {
+        res.status(400).json({ error: "Database error occurred finding user" });
+      }
+    })
+    .catch((err) => res.status(400).json({ error: "error getting user" }));
 };

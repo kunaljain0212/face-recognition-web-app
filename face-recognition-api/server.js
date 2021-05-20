@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const client = require("./configs/db");
 const authRoutes = require("./routes/auth");
+const imageRoutes = require("./routes/image");
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.get("/", (req, res) => {
   res.send("It is working!!");
 });
 app.use("/auth", authRoutes);
-// app.use("/image", noteRoutes);
+app.use("/image", imageRoutes);
 // app.post("/signin", (req, res) => {
 //   signin.handleSignin(req, res, bcrypt, db);
 // });
