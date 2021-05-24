@@ -8,6 +8,55 @@ import Register from "./components/Register/Register";
 import Signin from "./components/Signin/Signin";
 import "./App.css";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  entries: number;
+}
+
+interface ImageBox {
+  leftCol: number;
+  topRow: number;
+  rightCol: number;
+  bottomRow: number;
+}
+
+interface IProps {}
+
+interface IState {
+  input: string;
+  imageURL: string;
+  box: ImageBoxArray;
+  route: string;
+  isSignedIn: boolean;
+  user: User;
+}
+
+interface ApiData {
+  id: string;
+  region_info: {
+    bounding_box: {
+      top_row: number;
+      left_col: number;
+      bottom_row: number;
+      right_col: number;
+    };
+  };
+  data: {
+    concepts: {
+      id: string;
+      name: string;
+      value: number;
+      app_id: string;
+    }[];
+  };
+  value: number;
+}
+
+type ApiDataArray = Array<ApiData>;
+type ImageBoxArray = Array<ImageBox>;
+
 const particlesParameters = {
   particles: {
     number: {
@@ -31,7 +80,7 @@ const particlesParameters = {
   },
 };
 
-const initialState = {
+const initialState: IState = {
   input: "",
   imageURL: "",
   box: [],
@@ -42,34 +91,32 @@ const initialState = {
     name: "",
     email: "",
     entries: 0,
-    registeredOn: "",
   },
 };
 
-class App extends Component {
-  constructor() {
-    super();
+class App extends Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
     this.state = initialState;
   }
 
-  loadUser = (data) => {
+  loadUser = (data: User) => {
     this.setState({
       user: {
         id: data.id,
         name: data.name,
         email: data.email,
         entries: data.entries,
-        registeredOn: data.registeredOn,
       },
     });
   };
 
-  boxCordinates = (data) => {
-    const boxCordi = data.outputs[0].data.regions.map((value) => {
+  boxCordinates = (data: ApiDataArray) => {
+    const boxCordi = data.map((value) => {
       return value.region_info.bounding_box;
     });
     // console.log(cordi);
-    const image = document.getElementById("userImage");
+    const image = document.getElementById("userImage") as HTMLImageElement;
     const width = Number(image.width);
     const height = Number(image.height);
     const cordi = boxCordi.map((value) => {
@@ -83,11 +130,11 @@ class App extends Component {
     return cordi;
   };
 
-  displayFaceBox = (box) => {
+  displayFaceBox = (box: ImageBoxArray) => {
     this.setState({ box: box });
   };
 
-  onInputChange = (event) => {
+  onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ input: event.target.value });
   };
 
@@ -95,9 +142,8 @@ class App extends Component {
     this.setState({
       imageURL: this.state.input,
     });
-    const inputBar = document.getElementById("inputBar");
+    const inputBar = document.getElementById("inputBar") as HTMLInputElement;
     inputBar.value = "";
-    // console.log('image' + this.state.imageURL);
     fetch(`${process.env.REACT_APP_API_URL}/image/apiCall`, {
       method: "post",
       headers: {
@@ -109,7 +155,6 @@ class App extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        // console.log(response);
         if (response) {
           fetch(`${process.env.REACT_APP_API_URL}/image/updateEntries`, {
             method: "put",
@@ -121,19 +166,28 @@ class App extends Component {
             }),
           })
             .then((response) => response.json())
-            .then((data) => {
-              this.setState(Object.assign(this.state.user, { entries: data }));
+            .then((data: number) => {
+              this.setState({
+                ...this.state,
+                user: {
+                  id: this.state.user.id,
+                  email: this.state.user.email,
+                  name: this.state.user.name,
+                  entries: data,
+                },
+              });
             })
             .catch(console.log);
           // .catch(console.log);
         }
-
-        this.displayFaceBox(this.boxCordinates(response));
+        this.displayFaceBox(
+          this.boxCordinates(response.outputs[0].data.regions)
+        );
       })
       .catch((err) => console.log(err));
   };
 
-  changeRoute = (route) => {
+  changeRoute = (route: string) => {
     if (route === "signout") {
       this.setState(initialState);
     } else if (route === "home") {
