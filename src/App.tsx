@@ -7,20 +7,8 @@ import Rank from "./components/Rank/Rank";
 import Register from "./components/Register/Register";
 import Signin from "./components/Signin/Signin";
 import "./App.css";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  entries: number;
-}
-
-interface ImageBox {
-  leftCol: number;
-  topRow: number;
-  rightCol: number;
-  bottomRow: number;
-}
+import { ApiDataArray, ImageBoxArray, User } from "./interfaces/interfaces";
+import { options } from "./utils/particles";
 
 interface IProps {}
 
@@ -33,52 +21,7 @@ interface IState {
   user: User;
 }
 
-interface ApiData {
-  id: string;
-  region_info: {
-    bounding_box: {
-      top_row: number;
-      left_col: number;
-      bottom_row: number;
-      right_col: number;
-    };
-  };
-  data: {
-    concepts: {
-      id: string;
-      name: string;
-      value: number;
-      app_id: string;
-    }[];
-  };
-  value: number;
-}
-
-type ApiDataArray = Array<ApiData>;
-type ImageBoxArray = Array<ImageBox>;
-
-const particlesParameters = {
-  particles: {
-    number: {
-      value: 80,
-      density: {
-        enable: true,
-        value_area: 800,
-      },
-    },
-  },
-  interactivity: {
-    events: {
-      onhover: {
-        enable: true,
-        mode: "repulse",
-      },
-    },
-  },
-  size: {
-    value: 3,
-  },
-};
+const particlesParameters = options;
 
 const initialState: IState = {
   input: "",

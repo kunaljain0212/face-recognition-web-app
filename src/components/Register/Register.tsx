@@ -1,7 +1,19 @@
 import React from "react";
+import { User } from "../../interfaces/interfaces";
 
-class Register extends React.Component {
-  constructor(props) {
+interface IProps {
+  loadUser: (data: User) => void;
+  changeRoute: (route: string) => void;
+}
+
+interface IState {
+  Email: string;
+  Password: string;
+  Name: string;
+}
+
+class Register extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       Email: "",
@@ -10,21 +22,19 @@ class Register extends React.Component {
     };
   }
 
-  onEmailChange = (event) => {
+  onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ Email: event.target.value });
   };
 
-  onPasswordChange = (event) => {
+  onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ Password: event.target.value });
   };
 
-  onNameChange = (event) => {
+  onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ Name: event.target.value });
   };
 
   onRegister = () => {
-    // console.log(this.state);
-    // this.props.changeRoute("home")
     fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -35,12 +45,14 @@ class Register extends React.Component {
       }),
     })
       .then((response) => response.json())
-      .then(user =>{
-        // console.log(user);
+      .then((user: User) => {
         if (user.id) {
-          this.props.loadUser(user)
-          this.props.changeRoute('home')
+          this.props.loadUser(user);
+          this.props.changeRoute("home");
         }
+      })
+      .catch((error) => {
+        alert("Server error occured try again.");
       });
   };
 
