@@ -1,9 +1,18 @@
 import React from "react";
-// import React, { PureComponent } from 'react';
-// import { render } from "@testing-library/react";
+import { User } from "../../interfaces/interfaces";
 
-class Signin extends React.Component {
-  constructor(props) {
+interface IProps {
+  loadUser: (data: User) => void;
+  changeRoute: (route: string) => void;
+}
+
+interface IState {
+  signinEmail: string;
+  signinPassword: string;
+}
+
+class Signin extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       signinEmail: "",
@@ -11,11 +20,11 @@ class Signin extends React.Component {
     };
   }
 
-  onEmailChange = (event) => {
+  onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ signinEmail: event.target.value });
   };
 
-  onPasswordChange = (event) => {
+  onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ signinPassword: event.target.value });
   };
 
@@ -29,11 +38,14 @@ class Signin extends React.Component {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: User) => {
         if (data.id) {
-          this.props.loadUser(data)
+          this.props.loadUser(data);
           this.props.changeRoute("home");
         }
+      })
+      .catch((error) => {
+        alert("Server error occured try again.");
       });
   };
 

@@ -1,7 +1,12 @@
 import React from "react";
-import Logo from "../Logo/Logo.js";
+import Logo from "../Logo/Logo";
 
-const Navigation = ({ changeRoute, isSignedIn }) => {
+interface IProps {
+  changeRoute: (route: string) => void;
+  isSignedIn: boolean;
+}
+
+const Navigation: React.FC<IProps> = ({ changeRoute, isSignedIn }) => {
   if (isSignedIn === false) {
     return (
       <nav
@@ -43,7 +48,8 @@ const Navigation = ({ changeRoute, isSignedIn }) => {
         </nav>
       </div>
     );
-    // }}
+  } else {
+    return null;
   }
 };
 
