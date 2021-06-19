@@ -47,3 +47,7 @@ CREATE TABLE users (id SERIAL PRIMARY KEY, email TEXT UNIQUE NOT NULL, password 
 7. [pg](https://www.npmjs.com/package/pg)
 8. [Nodemon (devDependency)](https://www.npmjs.com/package/nodemon)
 9. [React-particles-js](https://www.npmjs.com/package/react-particles-js)
+
+### Connect with me:
+<a href="https://linkedin.com/in/kunaljain0212" target="blank"><img align="center" src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg" alt="kunaljain0212" height="30" width="40" /></a>
+<a href="https://instagram.com/_kunaaaaalll" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="_kunaaaaalll" height="30" width="30" /></a>
